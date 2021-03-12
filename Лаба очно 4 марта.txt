@@ -1,0 +1,34 @@
+import requests
+import json
+r = requests.get('http://45.156.21.76:7000/api/users/')
+print (r.text)
+from datetime import datetime
+data = {
+'username':'xett',
+'email':'kirilldrap@mail.ru',
+'password':'qwerty12345',
+'confirm_password':'qwerty12345',
+'date_joined':datetime(2006, 11, 21, 16, 30),
+}
+r = requests.post('http://45.156.21.76:7000/api/users/', data=data)
+print(r.text)
+s = requests.Session()
+data = {
+'username':'xett',
+'password':'qwerty12345',
+}
+r = s.post('http://45.156.21.76:7000/api/users/login/', data=data)
+print(json.loads(r.text)["auth_token"])
+token = ("token " + str(json.loads(r.text)["auth_token"]))
+data = {
+"name":"provesti12kjbhj bi20i1", 
+}
+answer = s.post('http://45.156.21.76:7000/api/todos/', headers = {'Authorization': token}, data=data)
+print(json.loads(answer.text))
+name_id = json.loads(answer.text)["id"]
+answer = s.put('http://45.156.21.76:7000/api/todos/'+str(name_id)+"/", headers = {'Authorization': token}, data=data)
+print(answer.text)
+answer = s.delete('http://45.156.21.76:7000/api/todos/'+str(name_id)+"/", headers = {'Authorization': token}, data=data)
+print(answer.text)
+answer = s.get('http://45.156.21.76:7000/api/todos/'+str(name_id)+"/", headers = {'Authorization': token}, data=data)
+print(answer.text)
